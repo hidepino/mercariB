@@ -18,16 +18,6 @@ $(function() {
     upload_image.append(html);
   }
 
-  // function SetLabelNum(next_label_id) {
-  //   if (document.getElementById(next_label_id) != null || next_label_id > 4){
-  //     for (var i = 1; i < 4; i++) {
-  //       if(document.getElementById(i)== null){
-  //         return i;
-  //         break;
-  //       }
-  //     }
-  //   }
-  // }
 
   // 削除機能
   $(document).on("click",".sell-image_delete",function(e) {

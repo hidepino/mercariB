@@ -1,11 +1,10 @@
 class ProductsController < ApplicationController
   before_action :product_new, only:[:new]
-  before_action :product_info, only: [:show, :item_show, :destroy]
+  before_action :product_info, only: [:show, :item_show, :destroy, :edit, :update]
+  before_action :move_to_login,only:[:new, :destroy]
+  before_action -> {seller_check(:back)}, only: [:edit]
+  before_action -> {seller_check(root_path)}, only: [:update, :item_show]
   skip_before_action :authenticate_user!, only: [:show, :item_show, :search, :price_recommend, :price_recommend_result]
-
-  def new
-    @product.images.build
-  end
 
   def show
     @images = @product.images
@@ -38,6 +37,16 @@ class ProductsController < ApplicationController
     @image = @product.images[0]
   end
 
+# 商品出品
+  def new
+    @product.images.build
+    @parents = Category.where(belongs: "parent")
+    @children = Category.where(belongs: "child")
+    @g_children = Category.where(belongs: "g_child")
+    @sizes = Size.all
+    @prefectures = JpPrefecture::Prefecture.all
+  end
+
   def create
     @product = Product.new(product_params)
     if @product.brand
@@ -54,9 +63,44 @@ class ProductsController < ApplicationController
         render action: :new
       end
     else
-      @product.images.build
       flash.now[:alert] = "画像を設定してください"
       render action: :new
+    end
+  end
+
+# 商品編集
+  def edit
+    flash.now[:alert] = "画像は再度設定をしてください"
+    # @product[:images_attributes] = Image.find(params.require(:product).require(:images_attributes)["0"][:id]).image
+    @product.images = []
+    @parents = Category.where(belongs: "parent")
+    @children = Category.where(belongs: "child")
+    @g_children = Category.where(belongs: "g_child")
+    @sizes = Size.all
+    @prefectures = JpPrefecture::Prefecture.all
+    @product.brand if @product.brand == nil
+    @product.images.build
+  end
+
+  def update
+    if params[:image]
+      if params[:product][:brand_attributes]
+        @brand = Brand.find_or_create_by(brand_params)
+        @product.brand_id = @brand.id
+      end
+      if @product.update(product_params_update)
+        params[:image].each do |i|
+          @product.images.create(product_id: @product.id, image: i)
+        end
+        redirect_to "/items/#{@product.id}"
+      else
+        @product.images.build
+        render :edit
+      end
+    else
+      @product.images.build
+      flash.now[:alert] = "画像を設定してください"
+      render :edit
     end
   end
 
@@ -130,12 +174,18 @@ class ProductsController < ApplicationController
     @same_product_price = @same_product.average(:price).floor.to_s(:delimited) if @same_product.present?
   end
 
-
   private
+  def brand_params
+    params.require(:product).require(:brand_attributes).permit(:name)
+  end
+
   def product_new
     @product = Product.new
   end
 
+  def image_params
+    params.permit(:image)
+  end
 
   def product_params
     params.require(:product).permit(
@@ -149,8 +199,25 @@ class ProductsController < ApplicationController
       :shipping_method,
       :delivery_date,
       :prefecture,
+      :brand_id,
       images_attributes: [:id,:product_id,:image,:_destroy],
       brand_attributes: [:id,:name]
+    ).merge(seller_id: current_user.id,sell_status_id: 1)
+  end
+
+  def product_params_update
+    params.require(:product).permit(
+      :name,
+      :info,
+      :price,
+      :category_id,
+      :size_id,
+      :status,
+      :delivery_fee_owner,
+      :shipping_method,
+      :delivery_date,
+      :prefecture,
+      images_attributes: [:id,:product_id,:image,:_destroy],
     ).merge(seller_id: current_user.id,sell_status_id: 1)
   end
 
@@ -205,4 +272,11 @@ class ProductsController < ApplicationController
   def move_to_login
     redirect_to new_user_session_path unless user_signed_in?
   end
+
+  def seller_check(a_path)
+    unless current_user.id == @product.seller_id
+      redirect_to a_path
+    end
+  end
+
 end

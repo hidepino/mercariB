@@ -54,6 +54,7 @@ $(function(){
     var interval = setInterval(function(){
     var LastCommentId = $('.comment-box').last().data('comment-id');
     var url = window.location.href + '/comments';
+    if (LastCommentId){
       $.ajax({
         url: url,
         type: "GET",
@@ -61,15 +62,31 @@ $(function(){
         dataType: "json"
       })
       .done(function(comments){
-        var id = LastCommentId;
+        var id = $('.comment-box').last().data('comment-id');
         comments.forEach(function(comment){
-          if ( comment.id > id){
+          if ( comment.id > id ){
             var html = buildHTML(comment);
             $('.messages').append(html);
           }
         })
         $('#post-btn').prop('disabled', false);
       })
+    } else {
+      $.ajax({
+        url: url,
+        type: "GET",
+        data: { id: gon.product_id},
+        dataType: "json"
+      })
+      .done(function(comments){
+        var id = $('.comment-box').last().data('comment-id');
+        comments.forEach(function(comment){
+          var html = buildHTML(comment);
+          $('.messages').append(html);
+        })
+        $('#post-btn').prop('disabled', false);
+      })
+    }
     }, 5000);
   }
 });
