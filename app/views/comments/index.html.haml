@@ -1,0 +1,10 @@
+- if user_signed_in?
+  %section.product-message
+    %ul.messages
+      = render partial: 'comments/comment', collection: @comments
+    %li.caution
+      %p 相手のことを考え丁寧なコメントを心がけましょう。不快な言葉遣いなどは利用制限や退会処分となることがあります。
+    = form_for [@product, @comment], html: {class: 'comment', id: 'post-comment'} do |f|
+      = f.text_area :content, class:'text-input'
+      .actions
+        = f.submit "コメントする", class: 'btn-gray', id: 'post-btn'

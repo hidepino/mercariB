@@ -1,0 +1,15 @@
+%li.clearfix.comment-box{ "data-comment-id": "#{comment.id}" }
+  .message-user
+    .user-img
+      = image_tag("user-icon.svg", class:"user-icon")
+  .message-body
+    .message-text
+      = comment.content
+    .message-icons.clearfix
+      .icon-left
+        %i.time
+        %p.text 50日前
+      .icon-right
+        =link_to "",class: 'report' do
+          %i.flag
+    %i.balloon

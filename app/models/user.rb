@@ -26,6 +26,7 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :credits
 
   has_many :sns_credentials
+  has_many :comments, dependent: :destroy
 
   protected
   def self.find_oauth(auth)

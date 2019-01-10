@@ -42,6 +42,7 @@ Rails.application.routes.draw do
   end
   #products関連
   resources :products, except: [:new] do
+    resources :comments, only: [:index, :create]
     collection do
       # get 'search'
       post 'completed_transaction'

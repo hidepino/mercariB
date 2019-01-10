@@ -251,9 +251,7 @@
             height: 32px;
             margin-top: 10px;
           }
-
         }
-
       }
       .message-body{
         position: relative;
@@ -282,9 +280,7 @@
               font-size: 12px;
               line-height: 12px;
               color: $Gray;
-
             }
-
           }
           .icon-right{
             float: right;
@@ -294,7 +290,6 @@
               color: $Gray;
               display: inline-block;
             }
-
           }
         }
         .message-icons.clearfix::after{
@@ -313,39 +308,37 @@
           position: absolute;
           top: 8px;
           left: -9px;
-
         }
       }
     }
     li:first-child{
       margin-top: 20px;
     }
-    .caution{
-      background-color: #fff6de;
-      padding: 8px;
-      font-size: 14px;
+  }
+  .caution{
+    background-color: #fff6de;
+    margin-top: 14px;
+    padding: 8px;
+    font-size: 14px;
+  }
+  .comment{
+    margin-top: 8px;
+    padding: 10px;
+    .text-input{
+      border: 1px solid #ccc;
+      min-height: 104px;
+      line-height: 1.5;
+      width: 100%;
     }
-    .comment{
-      margin-top: 8px;
-      padding: 10px;
-      .text-input{
-        background-color: $ThinGray;
-        border: 1px solid #ccc;
-        min-height: 104px;
-        line-height: 1.5;
+    .actions{
+      text-align: center;
+      margin: 8px 0 0 0;
+      .btn-gray{
         width: 100%;
-      }
-      .actions{
-        text-align: center;
-
-        margin: 8px 0 0 0;
-        .btn-gray{
-          width: 100%;
-          background-color: $Gray;
-          font-size: 14px;
-          line-height: 48px;
-          color: $White;
-        }
+        background-color: $Gray;
+        font-size: 14px;
+        line-height: 48px;
+        color: $White;
       }
     }
   }
