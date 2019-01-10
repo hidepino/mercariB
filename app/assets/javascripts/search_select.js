@@ -8,12 +8,51 @@ $(function(){
   var parent_select = $('.parent_select')
   var price_select = $('.price_select')
   var search_input = $("input[type=search]")
-  var search_sort = $('#search_sort')
+  var sort_select = $('#q_s')
   var selects = $('select')
   var searchbar = $('.search-bar')
   var searchbar_button = $('.search-bar__button')
   var size_check_boxes = $(".size_check_boxes")
   var size_group_select = $('.size_group_select')
+  var detail_search = $('.product_search__detail')
+
+  if (gon.search_params) {
+    var parent_val  = gon.search_params.category_id
+    var child_val   = gon.search_params.category_id_eq
+    var g_child_val = gon.search_params.category_id_in
+    var size_group_val = gon.search_params.size_size_group_id
+    var size_val = gon.search_params.size_id_in
+    var sort_val = gon.search_params.s
+  }
+
+  $(document).ready(function(){
+    if (parent_val){
+      parent_select.val(parent_val)
+      if (child_val){
+        var parent_results = filter_children(gon.children, parent_val)
+        append_child_option(child_select, g_child_check_boxes, parent_results);
+        hide_wrap.show();
+        child_select.val(child_val)
+        if (g_child_val){
+          append_g_child_check_boxes(parent_val, child_val, g_child_check_boxes);
+          g_child_val.forEach(function(val){
+            $(`#q_category_id_in_${val}`).prop("checked",true);
+          })
+        }
+      }
+    }
+    if (size_val){
+      size_group_select.val(size_group_val)
+      var size_group_results = filter_size(gon.sizes, size_group_val)
+      append_size_check_boxes(size_check_boxes, size_group_results);
+      size_val.forEach(function(val){
+        $(`#q_size_id_in_${val}`).prop("checked",true);
+      })
+    }
+    if (sort_val){
+      sort_select.val(sort_val)
+    }
+  })
 
   function append_child_option(select, check_boxes, results){
     select.empty()
@@ -58,31 +97,6 @@ $(function(){
     return results
   }
 
-  $(document).ready(function(){
-    if (gon.parent_val){
-      parent_select.val(gon.parent_val)
-      if (gon.child_val){
-        var parent_results = filter_children(gon.children, gon.parent_val)
-        append_child_option(child_select, g_child_check_boxes, parent_results);
-        hide_wrap.show();
-        child_select.val(gon.child_val)
-        if (gon.g_child_val){
-          append_g_child_check_boxes(gon.parent_val, gon.child_val, g_child_check_boxes);
-          gon.g_child_val.forEach(function(val){
-            $(`#q_category_id_in_${val}`).prop("checked",true);
-          })
-        }
-      }
-    }
-    if (gon.size_val){
-      size_group_select.val(gon.size_group_val)
-      var size_group_results = filter_size(gon.sizes, gon.size_group_val)
-      append_size_check_boxes(size_check_boxes, size_group_results);
-      gon.size_val.forEach(function(val){
-        $(`#q_size_id_in_${val}`).prop("checked",true);
-      })
-    }
-  })
 
   parent_select.change(function() {
     var parent_val = $(this).val();
@@ -115,13 +129,8 @@ $(function(){
     $('.max_price').val(max_price)
   })
 
-  search_sort.change(function(){
-    if ($(this).val() != ''){
-      current_url = window.location.href
-      reg_url     = current_url.replace(/&q%5Bs%5D=(price|created_at)\+(asc|desc)/g, "")
-      next_url = reg_url + "&q%5Bs%5D=" + $(this).val()
-      window.location.href = next_url
-    }
+  sort_select.change(function(){
+    detail_search.submit();
   })
 
   clear_btn.click(function(){

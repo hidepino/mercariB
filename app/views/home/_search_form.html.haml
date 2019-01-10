@@ -1,10 +1,10 @@
 .sidebar_wrapper
-  .select-wrap.sort-wrap
-    = select :search, :sort, [["価格の安い順", "price+asc"], ["価格の高い順", "price+desc"], ["出品の古い順", "created_at+asc"], ["出品の新しい順", "created_at+desc"]], {prompt: "並び替え"}, { class: "form__select" }
-  .search-bar__button 詳細検索
-  .sidebar.search-bar
-    %p.detail_title 詳細検索
-    = search_form_for(@search_data, url:search_path) do |f|
+  = search_form_for(@search_data, url:search_path, html:{ class: "product_search__detail" }) do |f|
+    .select-wrap.sort-wrap
+      = f.select :s, [["価格の安い順", "price asc"], ["価格の高い順", "price desc"], ["出品の古い順", "created_at asc"], ["出品の新しい順", "created_at desc"]], {prompt: "並び替え"}, { class: "form__select" }
+    .search-bar__button 詳細検索
+    .sidebar.search-bar
+      %p.detail_title 詳細検索
       .form
         = f.label :info_or_name_or_brand_name_or_category_name_cont_all, "キーワードを追加する"
         = f.search_field :info_or_name_or_brand_name_or_category_name_cont_all, placeholder: "値下げ", class: "form__input"
@@ -17,11 +17,12 @@
         .check-box-wrap.g_child_check_boxes
       .form
         = f.label :brand_name_cont_all, "ブランド名から探す"
-        = f.search_field :brand_name_cont_all, placeholder: "例）シャネル",autocomplete:"off", class: "form__input"
+        = f.search_field :brand_name_cont_all, placeholder: "例）シャネル",autocomplete:"off", class: "form__input input_brand"
+        %ul.brand-search-result
       .form
         = f.label :size_id_in, "サイズを指定する"
         .select-wrap
-          = f.collection_select :size_id, @size_groups, :id, :group, {prompt: "---"}, { class: "form__select size_group_select" }
+          = f.collection_select :size_size_group_id, @size_groups, :id, :group, {prompt: "---"}, { class: "form__select size_group_select" }
         .check-box-wrap.size_check_boxes
       .form
         = f.label :price, "価格"
