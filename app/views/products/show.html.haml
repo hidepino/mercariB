@@ -24,7 +24,7 @@
       %span.tax (税込)
       %span.tax-include 送料込み
     -if @product.buyer_id == nil
-      = link_to '購入画面に進む', transaction_path(@product), class: "buy-btn"
+      = link_to '購入画面に進む', transaction_path, class: "buy-btn"
     -else
       .btn.btn__soldout 売り切れました
   .product-detail #{@product.info}
