@@ -4,7 +4,7 @@ $(function(){
       <li class="clearfix comment-box" data-comment-id=${comment.id}>
         <div class="message-user">
           <div class="user-img">
-            <img class="user-icon" src="/assets/user-icon.svg" alt="User icon">
+            <img class="user-icon" src="user-icon.svg" alt="User icon">
           </div>
         </div>
         <div class="message-body">
