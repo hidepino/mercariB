@@ -4,7 +4,8 @@
       = image_tag("/assets/user-icon.svg", class:"user-icon")
   .message-body
     .message-text
-      = comment.content
+      -if comment.content.present?
+        = comment.content
     .message-icons.clearfix
       .icon-left
         %i.time

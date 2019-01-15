@@ -8,6 +8,7 @@ class ProductsController < ApplicationController
 
   def show
     @images = @product.images
+    @product_price = @product.price.to_s(:delimited)
     gon.images = @images.length
     @sell_user = @product.seller
     @sell_other_products = Product.where(seller_id: @product.seller_id)
@@ -34,7 +35,11 @@ class ProductsController < ApplicationController
   end
 
   def item_show
-    @image = @product.images[0]
+    @images = @product.images
+    gon.images = @images.length
+    @product_price = @product.price.to_s(:delimited)
+    @comment = Comment.new
+    @comments = @product.comments.includes(:user)
   end
 
 # 商品出品
