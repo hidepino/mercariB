@@ -45,11 +45,11 @@ class ProductsController < ApplicationController
 # 商品出品
   def new
     @product.images.build
-    @parents = Category.where(belongs: "parent")
-    @children = Category.where(belongs: "child")
-    @g_children = Category.where(belongs: "g_child")
-    @sizes = Size.all
-    @prefectures = JpPrefecture::Prefecture.all
+    @parents        = Category.where(belongs:"parent")
+    gon.children    = Category.where(belongs:"child")
+    gon.g_children  = Category.where(belongs:"g_child")
+    @sizes          = Size.all
+    @prefectures    = JpPrefecture::Prefecture.all
   end
 
   def create
@@ -76,15 +76,24 @@ class ProductsController < ApplicationController
 # 商品編集
   def edit
     flash.now[:alert] = "画像は再度設定をしてください"
-    # @product[:images_attributes] = Image.find(params.require(:product).require(:images_attributes)["0"][:id]).image
-    @product.images = []
-    @parents = Category.where(belongs: "parent")
-    @children = Category.where(belongs: "child")
-    @g_children = Category.where(belongs: "g_child")
+    gon.images = @product.images
+    gon.category = @product.category.id
+    if @product.category.parent.present?
+      gon.category_parent = @product.category.parent.id
+      if @product.category.parent.parent.present?
+        gon.category_g_parent = @product.category.parent.parent.id
+      end
+    end
+
+    @parents        = Category.where(belongs:"parent")
+    @children       = Category.where(ancestry: "#{@product.category.parent.parent.id}")
+    @child          = @product.category.parent
+    @g_children     = @child.children
+    gon.children    = Category.where(belongs:"child")
+    gon.g_children  = Category.where(belongs:"g_child")
     @sizes = Size.all
     @prefectures = JpPrefecture::Prefecture.all
     @product.brand if @product.brand == nil
-    @product.images.build
   end
 
   def update
@@ -94,18 +103,17 @@ class ProductsController < ApplicationController
         @product.brand_id = @brand.id
       end
       if @product.update(product_params_update)
+        @product.images = []
         params[:image].each do |i|
           @product.images.create(product_id: @product.id, image: i)
         end
         redirect_to "/items/#{@product.id}"
       else
-        @product.images.build
-        render :edit
+        redirect_back(fallback_location: edit_product_path)
       end
     else
-      @product.images.build
       flash.now[:alert] = "画像を設定してください"
-      render :edit
+      redirect_back(fallback_location: edit_product_path)
     end
   end
 

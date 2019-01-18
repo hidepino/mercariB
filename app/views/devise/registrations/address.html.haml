@@ -48,20 +48,20 @@
             .form
               = i.label :postal_code, "郵便番号"
               %span.form-require 必須
-              = i.text_field :postal_code, placeholder: "例)123-4567", required:"", class: "form__input"
+              = i.text_field :postal_code, placeholder: "例)123-4567", required:"", class: "form__input", id: "address_zip"
             .form
               = i.label :prefecture, "都道府県"
               %span.form-require 必須
               .select-wrap
-                = i.collection_select :prefecture, JpPrefecture::Prefecture.all, :code, :name, {}, {class: "form__select"}
+                = i.collection_select :prefecture, JpPrefecture::Prefecture.all, :code, :name, {}, {class: "form__select", id: "address_prefecture_name"}
             .form
               = i.label :municipality, "市区町村"
               %span.form-require 必須
-              = i.text_field :municipality, placeholder: "例)横浜市緑区", required:"", class: "form__input"
+              = i.text_field :municipality, placeholder: "例)横浜市緑区", required:"", class: "form__input", id:"address_city"
             .form
               = i.label :address_number, "番地"
               %span.form-require 必須
-              = i.text_field :address_number, placeholder: "例)青山1-1-1", required:"", class: "form__input"
+              = i.text_field :address_number, placeholder: "例)青山1-1-1", required:"", class: "form__input", id:"address_street"
             .form
               = i.label :building_name, "建物名"
               = i.text_field :building_name, placeholder: "例)柳ビル103", class: "form__input"

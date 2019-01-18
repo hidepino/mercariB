@@ -16,6 +16,7 @@ $(function() {
                     </a>
                 </li>`
     upload_image.append(html);
+    ImageCount()
   }
 
 
@@ -33,7 +34,7 @@ $(function() {
 // 4つ以上のときフォームを消す
 function ImageCount() {
   var imagelist = $('li.sell-dropbox-items_container');
-  if(imagelist.length >= 3){
+  if(imagelist.length >= 4){
     $('.sell-dropbox-uploader').addClass('hidden');
     $('ul.sell-dropbox-items').css('border','none');
   }
@@ -46,7 +47,7 @@ function ImageCount() {
 
 // ドラッグオーバー定義
   var target = document.getElementById('drop');
-  if (target != null) {
+  if (target) {
     target.addEventListener('dragover', function (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -72,7 +73,6 @@ function ImageCount() {
       i_count += 1;
       $("label.sell-dropbox-uploader_container").attr('for','product_images_attributes_0_image'+ i_count);
     }
-    ImageCount()
   });
 
 });

@@ -65,12 +65,12 @@
                   カテゴリー
                   %span.form-require.sell 必須
                 .select-wrap
-                  = f.collection_select :category_id,Category.where(belongs: "parent"), :id, :name,prompt: "---"
-                .select-wrap
-                  = f.collection_select :category_id,Category.where(belongs: "child"), :id, :name,prompt: "---"
-                .select-wrap
-                  = f.collection_select :category_id,Category.where(belongs: "g_child"), :id, :name,prompt: "---"
-          .sell-form-box
+                  = f.collection_select :category_id, @parents, :id, :name, {prompt: "---"}, {class: "form-select_parent"}
+                .select-wrap.hide-wrap
+                  = f.select :category_id, {}, {prompt: "---"}, {class: "form-select_child"}
+                .select-wrap.second-hide-wrap
+                  = f.select :category_id, {}, {prompt: "---"}, {class: "form-select_g_child"}
+          .sell-form-box.third-hide-wrap
             .form-group
               = f.label :size_id,class: "sell-form-select" do
                 %h4.sell-form-sub_title
@@ -78,7 +78,7 @@
                   %span.form-require.sell 必須
                 .select-wrap
                   = f.collection_select :size_id, Size.all, :id, :size, prompt: "---"
-          .sell-form-box
+          .sell-form-box.third-hide-wrap
             .form-group
               =f.fields_for :brand_attributes, @product.brand do |b|
                 .form-group

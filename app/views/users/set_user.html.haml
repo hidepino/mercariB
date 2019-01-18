@@ -21,20 +21,20 @@
               .form
                 = add_f.label :postal_code, "郵便番号"
                 %span.form-arbitrary 任意
-                = add_f.text_field :postal_code, placeholder: "例)123-4567", value: current_user.address.postal_code, class: "form__input"
+                = add_f.text_field :postal_code, placeholder: "例)123-4567", value: current_user.address.postal_code, class: "form__input", id: "address_zip"
               .form
                 = add_f.label :prefecture, "都道府県"
                 %span.form-require 必須
                 .select-wrap
-                  = add_f.collection_select :prefecture, JpPrefecture::Prefecture.all, :code, :name, {}, { class: "form__select" }
+                  = add_f.collection_select :prefecture, JpPrefecture::Prefecture.all, :code, :name, {}, { class: "form__select" , id: "address_prefecture_name"}
               .form
                 = add_f.label :municipality, "市区町村"
                 %span.form-require 必須
-                = add_f.text_field :municipality, placeholder: "例)横浜市緑区", value: current_user.address.municipality, class: "form__input"
+                = add_f.text_field :municipality, placeholder: "例)横浜市緑区", value: current_user.address.municipality, class: "form__input", id:"address_city"
               .form
                 = add_f.label :address_number, "番地"
                 %span.form-require 必須
-                = add_f.text_field :address_number, placeholder: "例)青山1-1-1", value: current_user.address.address_number, class: "form__input"
+                = add_f.text_field :address_number, placeholder: "例)青山1-1-1", value: current_user.address.address_number, class: "form__input", id:"address_street"
               .form
                 = add_f.label :building_name, "建物名"
                 = add_f.text_field :building_name, placeholder: "例)柳ビル103", value: current_user.address.building_name, class: "form__input"
